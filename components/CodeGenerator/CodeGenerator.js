@@ -1,42 +1,32 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '../Button/Button';
 import './CodeGenerator.css';
-const uniqueCodes = [
-  "CODE001",
-  "CODE002",
-  "CODE003",
-  "CODE004",
-  "CODE005",
-  "CODE006",
-  "CODE007",
-  "CODE008",
-  "CODE009",
-  "CODE010",
-  "CODE011",
-  "CODE012",
-  "CODE013",
-  "CODE014",
-  "CODE015",
-  "CODE016",
-  "CODE017",
-  "CODE018",
-  "CODE019",
-  "CODE020",
-  "CODE021",
-  "CODE022",
-  "CODE023",
-  "CODE024",
-  "CODE025",
-  "CODE026",
-   // Add the rest of the unique codes below (it is going to be around 300)
-];
 
 const CodeGenerator = () => {
-  const [availableCodes, setAvailableCodes] = useState(uniqueCodes);
+  const [availableCodes, setAvailableCodes] = useState([]);
   const [randomUniqueCode, setRandomUniqueCode] = useState("");
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/checkdb');
+        const dataobject = await response.json();
+        const data = dataobject[0]
+        console.log(data)
+        if (data && data.uniqueCodes) {
+          setAvailableCodes(data.uniqueCodes);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
   const getRandomUniqueCode = () => {
+    console.log(availableCodes)
     if (availableCodes.length === 0) {
       setRandomUniqueCode("No more unique codes available");
     } else {
@@ -47,9 +37,6 @@ const CodeGenerator = () => {
       setRandomUniqueCode(selectedCode);
     }
   };
-
-  console.log(availableCodes);
-  console.log(randomUniqueCode);
 
   return (
     <div className="codeGenerator">

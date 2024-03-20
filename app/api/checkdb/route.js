@@ -16,7 +16,7 @@ export async function GET() {
 
     // Disconnect from the database
     // Return a response indicating successful retrieval
-    return new NextResponse("Data retrieved and logged successfully");
+    return NextResponse.json(data);
   } catch (error) {
     console.error("Error fetching data:", error);
     return NextResponse.error(error);
