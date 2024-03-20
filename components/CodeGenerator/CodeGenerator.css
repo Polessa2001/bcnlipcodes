@@ -1,0 +1,13 @@
+.codeGenerator {
+  display: flex;
+  height: 40vh;
+  margin: auto;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.codeGenerator h1 {
+  height: 50px; /* Fixed height */
+  overflow: hidden; /* Hide overflow content */
+}
