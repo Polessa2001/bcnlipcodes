@@ -4,39 +4,25 @@ import Button from '../Button/Button';
 import './CodeGenerator.css';
 
 const CodeGenerator = () => {
-  const [availableCodes, setAvailableCodes] = useState([]);
   const [randomUniqueCode, setRandomUniqueCode] = useState("");
-
-  useEffect(() => {
+  const getRandomUniqueCode = () => {
     async function fetchData() {
       try {
-        const response = await fetch('/api/checkdb');
-        const dataobject = await response.json();
-        const data = dataobject[0]
+        const response = await fetch('/api/checkdb', {
+          method: 'POST'
+        });
+        const data = await response.json();
         console.log(data)
-        if (data && data.uniqueCodes) {
-          setAvailableCodes(data.uniqueCodes);
+        if (data._id) {
+          setRandomUniqueCode(data._id);
         }
       } catch (error) {
+        setRandomUniqueCode("Se acabaron los códigos");
         console.error('Error fetching data:', error);
       }
     }
-
-    fetchData();
-  }, []);
-
-  const getRandomUniqueCode = () => {
-    console.log(availableCodes)
-    if (availableCodes.length === 0) {
-      setRandomUniqueCode("No more unique codes available");
-    } else {
-      const randomIndex = Math.floor(Math.random() * availableCodes.length);
-      const selectedCode = availableCodes[randomIndex];
-      const updatedCodes = [...availableCodes.slice(0, randomIndex), ...availableCodes.slice(randomIndex + 1)];
-      setAvailableCodes(updatedCodes);
-      setRandomUniqueCode(selectedCode);
-    }
-  };
+    fetchData()
+  }
 
   return (
     <div className="codeGenerator">
